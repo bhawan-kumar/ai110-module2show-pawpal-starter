@@ -41,3 +41,15 @@ pip install -r requirements.txt
 5. Add tests to verify key behaviors.
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
+
+## Smarter Scheduling
+
+PawPal+ goes beyond a simple task list with four scheduling features built into `Scheduler`:
+
+**Sorting by time with priority tiebreaking** — `sort_by_time()` orders today's tasks ascending by start time. When two tasks share the same start time, `high` priority tasks surface first, followed by `medium`, then `low`. This ensures the most important work is never buried behind a lower-stakes task that happens to start at the same minute.
+
+**Filtering by pet name and completion status** — `filter_tasks(pet_name, status)` narrows today's task list to a specific pet (by name) and/or a completion state (`"completed"` or `"incomplete"`). Both parameters are optional and compose together, so an owner can ask for just Mochi's incomplete tasks in a single call.
+
+**Conflict detection** — `detect_conflicts()` scans today's tasks and returns every pair whose time windows overlap. The Streamlit UI runs this check before adding a new task and surfaces a warning with the conflicting task names and times, preventing double-booking before it reaches the schedule.
+
+**Recurring daily and weekly tasks** — `handle_recurring_tasks()` inspects each pet's task history and automatically clones any `daily` or `weekly` task into today's schedule if it isn't already there. Daily tasks are carried forward every day; weekly tasks are only added when today matches the original task's day of the week. Tasks already present for today are never duplicated.

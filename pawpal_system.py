@@ -72,37 +72,33 @@ class Scheduler:
         today = date.today()
         return [t for t in self._collect_all_tasks() if t.date == today]
 
+    _PRIORITY_RANK = {"high": 0, "medium": 1, "low": 2}
+
     def sort_by_time(self) -> List[Task]:
-        """Return today's tasks sorted ascending by start time."""
-        return sorted(self.get_todays_tasks(), key=lambda t: t.time)
+        """Return today's tasks sorted ascending by start time, then by priority (high first) on ties."""
+        return sorted(
+            self.get_todays_tasks(),
+            key=lambda t: (t.time, self._PRIORITY_RANK.get(t.priority, 1)),
+        )
 
-    def filter_tasks(self, criteria: str) -> List[Task]:
-        """Filter today's tasks by a 'field:value' string (e.g. 'priority:high', 'species:dog')."""
-        tasks = self.get_todays_tasks()
-        if ":" not in criteria:
-            return tasks
+    def filter_tasks(self, pet_name: str = None, status: str = None) -> List[Task]:
+        """Return today's tasks filtered by pet name and/or status ('completed' or 'incomplete')."""
+        today = date.today()
+        result: List[Task] = []
 
-        field_name, value = criteria.split(":", 1)
-        field_name = field_name.strip().lower()
-        value = value.strip().lower()
+        for pet in self.owner.pets:
+            if pet_name is not None and pet.name.lower() != pet_name.lower():
+                continue
+            for t in pet.get_tasks():
+                if t.date != today:
+                    continue
+                if status == "completed" and not t.completed:
+                    continue
+                if status == "incomplete" and t.completed:
+                    continue
+                result.append(t)
 
-        if field_name == "priority":
-            return [t for t in tasks if t.priority.lower() == value]
-        elif field_name == "frequency":
-            return [t for t in tasks if t.frequency.lower() == value]
-        elif field_name == "completed":
-            flag = value in ("true", "1", "yes")
-            return [t for t in tasks if t.completed == flag]
-        elif field_name == "species":
-            # Tasks don't carry a pet reference, so traverse owner → pet
-            today = date.today()
-            result: List[Task] = []
-            for pet in self.owner.pets:
-                if pet.species.lower() == value:
-                    result.extend(t for t in pet.get_tasks() if t.date == today)
-            return result
-        else:
-            return tasks
+        return result
 
     def detect_conflicts(self) -> List[Tuple[Task, Task]]:
         """Return every pair of today's tasks whose time windows overlap."""

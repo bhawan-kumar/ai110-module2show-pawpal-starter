@@ -36,12 +36,18 @@
 **a. Constraints and priorities**
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
+- My scheduler considers time (no overlapping tasks), priority (high priority tasks surface first when two tasks share the same start time), and completion status (tasks can be filtered by done or incomplete).
+
 - How did you decide which constraints mattered most?
+- Time was the most important constraint because overlapping tasks are physically impossible to complete. Priority was second because it helps the owner decide what matters most when tasks start at the same time.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+- The scheduler uses a simple O(n²) nested loop for conflict detection instead of a more optimized early-exit version.
+
 - Why is that tradeoff reasonable for this scenario?
+- This is reasonable because a typical pet owner will have very few tasks per day, so the performance difference is negligible and the simpler version is easier to read and maintain.
 
 ---
 
