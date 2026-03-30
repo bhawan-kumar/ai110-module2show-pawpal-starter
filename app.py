@@ -84,10 +84,18 @@ if submitted:
     ]
 
     if conflicts:
-        conflict_list = ", ".join(
-            f"'{t.title}' at {t.time.strftime('%H:%M')}" for t in conflicts
-        )
-        st.error(f"Time conflict with: {conflict_list}. Adjust the start time or duration.")
+        for t in conflicts:
+            t_start = t.time.hour * 60 + t.time.minute
+            t_end = t_start + t.duration
+            overlap = min(new_end, t_end) - max(new_start, t_start)
+            earliest_start = t_end  # first free minute after the conflict
+            earliest_h, earliest_m = divmod(earliest_start, 60)
+            st.error(
+                f"Conflict with '{t.title}' ({t.time.strftime('%H:%M')}–"
+                f"{(t_end // 60):02d}:{(t_end % 60):02d}): "
+                f"overlaps by {overlap} min. "
+                f"Try starting at {earliest_h:02d}:{earliest_m:02d} or later."
+            )
     else:
         pet = next((p for p in owner.pets if p.name == pet_name), None)
         if pet is None:
@@ -127,7 +135,17 @@ st.divider()
 st.subheader("Today's Schedule")
 
 if st.button("Generate schedule"):
-    scheduled = st.session_state.scheduler.sort_by_time()
+    scheduler = st.session_state.scheduler
+    scheduler.handle_recurring_tasks()
+
+    conflicts = scheduler.detect_conflicts()
+    for a, b in conflicts:
+        st.warning(
+            f"Conflict: '{a.title}' ({a.time.strftime('%H:%M')}) and "
+            f"'{b.title}' ({b.time.strftime('%H:%M')}) overlap."
+        )
+
+    scheduled = scheduler.sort_by_time()
     if scheduled:
         st.table([
             {

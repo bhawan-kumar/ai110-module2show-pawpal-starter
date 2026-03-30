@@ -56,12 +56,18 @@
 **a. How you used AI**
 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
+  I used Claude Code throughout the project for design brainstorming (generating the UML diagram), scaffolding class skeletons, fleshing out method logic, generating docstrings, and writing tests. Opening a new chat session for each phase kept the context focused. When planning algorithms in Phase 4, starting fresh meant the AI wasn't confused by earlier design conversations, and suggestions were more relevant to the current task.
+
 - What kinds of prompts or questions were most helpful?
+  The most helpful prompts were specific and referenced the file directly, such as "review #pawpal_system.py and suggest missing relationships." Asking for explanations before edits ("tell me what you are doing first") also helped me stay in control of the design.
 
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
+  When AI suggested replacing the O(n²) conflict detection loop with an early-exit optimized version, I chose to keep the simpler version because the performance gain was unnecessary for a small pet schedule.
+
 - How did you evaluate or verify what the AI suggested?
+  When AI suggested replacing the O(n²) conflict detection loop with an early-exit optimized version, I chose to keep the simpler version because the performance gain was unnecessary for a small pet schedule.
 
 ---
 
@@ -70,12 +76,18 @@
 **a. What you tested**
 
 - What behaviors did you test?
+  When AI suggested replacing the O(n²) conflict detection loop with an early-exit optimized version, I chose to keep the simpler version because the performance gain was unnecessary for a small pet schedule.
+
 - Why were these tests important?
+  These tests verified the core algorithms that the scheduler relies on. Without them, a broken sort or recurring task bug could silently produce a wrong schedule.
 
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
+  4 out of 5 stars. The core behaviors are well covered by 7 passing tests.
+
 - What edge cases would you test next if you had more time?
+  Three-way conflict detection, weekly tasks scheduled exactly one week ago, and an owner with no pets at all.
 
 ---
 
@@ -84,11 +96,14 @@
 **a. What went well**
 
 - What part of this project are you most satisfied with?
+  The algorithmic layer in pawpal_system.py: sorting, filtering, conflict detection, and recurring tasks all work together cleanly and are fully tested.
 
 **b. What you would improve**
 
-- If you had another iteration, what would you improve or redesign?
+- If you had another iteration, what would you improve or redesign?\
+  I would add a way to mark tasks complete directly in the Streamlit UI, and improve the filter UI so owners can filter the schedule by pet name or status without writing code.
 
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+  AI is a powerful scaffold but not the architect. Every suggestion needed to be reviewed and verified and the human role was to maintain design intent, reject unnecessary complexity, and ensure the system stayed coherent across phases. But I would consider a really great tool to understand and go beyond.
