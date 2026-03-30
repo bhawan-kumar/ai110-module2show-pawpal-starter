@@ -53,3 +53,22 @@ PawPal+ goes beyond a simple task list with four scheduling features built into 
 **Conflict detection** — `detect_conflicts()` scans today's tasks and returns every pair whose time windows overlap. The Streamlit UI runs this check before adding a new task and surfaces a warning with the conflicting task names and times, preventing double-booking before it reaches the schedule.
 
 **Recurring daily and weekly tasks** — `handle_recurring_tasks()` inspects each pet's task history and automatically clones any `daily` or `weekly` task into today's schedule if it isn't already there. Daily tasks are carried forward every day; weekly tasks are only added when today matches the original task's day of the week. Tasks already present for today are never duplicated.
+
+## Testing PawPal+
+
+Run the test suite with:
+
+```bash
+py -m pytest
+```
+
+The tests cover:
+
+- Task completion (mark_complete changes status)
+- Task addition (adding a task increases pet's task count)
+- Sorting with priority tiebreaking (high priority appears first on same start time)
+- Recurring weekly tasks (wrong day tasks are not carried forward)
+- Conflict detection (fully contained tasks are flagged)
+- Filtering by pet name (case-insensitive matching)
+
+Confidence level: 4/5 stars — core behaviors are well covered. Edge cases around weekly recurrence on exact weekday boundaries and three-way conflict detection would be next to add.
