@@ -9,12 +9,25 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+  My initial UML design consisted of four classes connected by ownership relationships:
+  Owner holds a list of Pets, each Pet holds a list of Tasks, and a Scheduler
+  manages the Owner to access everything.
+
 - What classes did you include, and what responsibilities did you assign to each?
+  I designed four classes:
+- Task: Holds the details of a single care activity (title, time, duration, priority, frequency, completed status) and can mark itself complete.
+- Pet: Represents a pet with a name and species, holds a list of Tasks, and can add and retrieve tasks.
+- Owner: Represents the pet owner, holds a list of Pets, and can add pets and retrieve all tasks across all pets.
+- Scheduler: The brain of the system — it takes an Owner and can retrieve, sort, filter, and detect conflicts in tasks, and handle recurring tasks.
 
 **b. Design changes**
 
-- Did your design change during implementation?
+- Did your design change during implementation?'
+  Yes, the design changed after AI reviewed the skeleton. Two changes were made.
 - If yes, describe at least one change and why you made it.
+  The two changes are:
+- The `time` field on `Task` was changed from a plain `str` to `datetime.time` because string comparison would break sorting and conflict detection.
+- A `date` field was added to `Task` because without it, recurring tasks had nowhere to attach the next scheduled occurrence.
 
 ---
 

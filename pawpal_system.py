@@ -1,14 +1,15 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-
+from typing import List
+from datetime import date, time
 
 @dataclass
 class Task:
     title: str
-    time: str          # e.g. "08:00"
+    time: time         # e.g. time(8, 0) for 08:00
+    date: date         # e.g. date.today()
     duration: int      # in minutes
-    priority: str      # e.g. "high", "medium", "low"
-    frequency: str     # e.g. "daily", "weekly", "once"
+    priority: str      # "high", "medium", "low"
+    frequency: str     # "daily", "weekly", "once"
     completed: bool = False
 
     def mark_complete(self) -> None:
