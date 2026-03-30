@@ -2,6 +2,10 @@
 
 ## 1. System Design
 
+1. Add a pet – The user can enter a pet's name, species, and basic info to register them in the system.
+2. Schedule a task – The user can create a care task (walk, feeding, medication, etc.) with a time, duration, and priority level and assign it to a pet.
+3. View today's schedule – The user can see all tasks for the day across all pets, sorted by time and organized clearly.
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
